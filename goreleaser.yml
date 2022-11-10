@@ -1,6 +1,5 @@
 before:
   hooks:
-    - make setup
     - go generate ./...
 project_name: create-disploy-app
 release:
