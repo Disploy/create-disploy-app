@@ -1,0 +1,31 @@
+{
+  "name": "create-disploy-app",
+  "version": "0.1.5",
+  "description": "Jumpstart your next Disploy bot",
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  },
+  "bin": {
+    "create-disploy-app": "create-disploy-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Disploy/create-disploy-app.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Disploy/create-disploy-app/issues"
+  },
+  "goBinary": {
+    "name": "create-disploy-app",
+    "path": "./bin"
+  },
+  "homepage": "https://github.com/Disploy/create-disploy-app",
+  "files": [
+    "dist",
+    "postinstall.js"
+  ],
+  "dependencies": {
+    "mkdirp": "^1.0.4"
+  }
+}

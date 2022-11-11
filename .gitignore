@@ -1,2 +1,5 @@
 .DS_Store
 *.pem
+node_modules/
+dist/
+create-disploy-app.js

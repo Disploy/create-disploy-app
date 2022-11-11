@@ -1,0 +1,71 @@
+before:
+  hooks:
+    - go generate ./...
+project_name: create-disploy-app
+release:
+  github:
+    owner: disploy
+    name: create-disploy-app
+builds:
+  - id: create-disploy-app-darwin-amd64
+    ldflags:
+      - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
+    binary: create-disploy-app
+    main: ./cmd/create-disploy-app/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+  - id: create-disploy-app-darwin-arm64
+    ldflags:
+      - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
+    binary: create-disploy-app
+    main: ./cmd/create-disploy-app/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - arm64
+  - id: create-disploy-app-linux-amd64
+    ldflags:
+      - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
+    main: ./cmd/create-disploy-app/main.go
+    binary: create-disploy-app
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+  - id: create-disploy-app-windows-amd64
+    ldflags:
+      - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
+    main: ./cmd/create-disploy-app/main.go
+    binary: create-disploy-app
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+    goarch:
+      - amd64
+archives:
+  - replacements:
+      darwin: darwin
+      linux: linux
+      windows: windows
+      386: i386
+      amd64: amd64
+
+checksum:
+  name_template: "{{ .ProjectName }}checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
