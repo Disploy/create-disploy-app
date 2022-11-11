@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require("node:fs");
+const path = require("node:path");
 
 const ARCH_MAPPING = {
   ia32: "386",
@@ -28,9 +29,12 @@ if (!folder) {
   process.exit(1);
 }
 
-const binP = `dist/${folder}/create-disploy-app${
-  platform === "windows" ? ".exe" : ""
-}`;
+const binP = path.join(
+  __dirname,
+  "dist",
+  folder,
+  `create-disploy-app${platform === "windows" ? ".exe" : ""}`
+);
 
 fs.writeFileSync(
   "create-disploy-app.js",

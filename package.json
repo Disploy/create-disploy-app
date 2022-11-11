@@ -1,6 +1,6 @@
 {
   "name": "create-disploy-app",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Jumpstart your next Disploy bot",
   "scripts": {
     "postinstall": "node postinstall.js"
