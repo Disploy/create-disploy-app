@@ -6,7 +6,7 @@
     "postinstall": "node postinstall.js"
   },
   "bin": {
-    "create-disploy-app": "create-disploy-app"
+    "create-disploy-app": "./create-disploy-app.js"
   },
   "repository": {
     "type": "git",
