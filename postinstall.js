@@ -30,7 +30,6 @@ if (!folder) {
 }
 
 const binP = path.join(
-  __dirname,
   "dist",
   folder,
   `create-disploy-app${platform === "windows" ? ".exe" : ""}`
@@ -40,7 +39,8 @@ fs.writeFileSync(
   "create-disploy-app.js",
   [
     "const { spawn } = require('node:child_process');",
-    `spawn('${binP}', process.argv.slice(2), { stdio: 'inherit' })`,
+    "const { join } = require('node:path');",
+    `spawn(join(__dirname, '${binP}'), process.argv.slice(2), { stdio: 'inherit' })`,
     ".on('exit', (code) => process.exit(code));",
   ].join("\n")
 );
