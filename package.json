@@ -1,6 +1,6 @@
 {
   "name": "create-disploy-app",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Jumpstart your next Disploy bot",
   "scripts": {
     "postinstall": "node postinstall.js"
@@ -16,14 +16,11 @@
   "bugs": {
     "url": "https://github.com/Disploy/create-disploy-app/issues"
   },
-  "goBinary": {
-    "name": "create-disploy-app",
-    "path": "./bin"
-  },
   "homepage": "https://github.com/Disploy/create-disploy-app",
   "files": [
     "dist",
-    "postinstall.js"
+    "postinstall.js",
+    "create-disploy-app.js"
   ],
   "dependencies": {
     "mkdirp": "^1.0.4"
