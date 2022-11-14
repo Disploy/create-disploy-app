@@ -1,17 +1,21 @@
 package main
 
 import (
+	"archive/zip"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/libgit2/git2go/v28"
 )
 
-var URL = "https://github.com/disploy/create-disploy-app"
+var URL = "https://github.com/Disploy/create-disploy-app/archive/refs/heads/main.zip"
 
 var baseStyle = lipgloss.NewStyle().
 	BorderStyle(lipgloss.NormalBorder()).
@@ -37,7 +41,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return m, tea.Quit
 		case "enter":
-			project := m.table.SelectedRow()[1];
+			project := m.table.SelectedRow()[1]
 
 			copy(project)
 
@@ -53,18 +57,124 @@ func (m model) View() string {
 }
 
 func copy(name string) {
-	println("Moving " + name);
-	os.Rename(".disploy/assets/" + name, name);
-	os.RemoveAll(".disploy");
+	fmt.Println("Moving " + name)
+	os.Rename(".disploy/create-disploy-app-main/assets/"+name, name)
+	os.RemoveAll(".disploy")
+	os.Remove(".disploy.zip")
+}
+
+func downloadFile(filepath string, url string) (err error) {
+
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Check server response
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("bad status: %s", resp.Status)
+	}
+
+	// Writer the body to file
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func unzip(src, dest string) error {
+    r, err := zip.OpenReader(src)
+    if err != nil {
+        return err
+    }
+    defer func() {
+        if err := r.Close(); err != nil {
+            panic(err)
+        }
+    }()
+
+    os.MkdirAll(dest, 0755)
+
+    // Closure to address file descriptors issue with all the deferred .Close() methods
+    extractAndWriteFile := func(f *zip.File) error {
+        rc, err := f.Open()
+        if err != nil {
+            return err
+        }
+        defer func() {
+            if err := rc.Close(); err != nil {
+                panic(err)
+            }
+        }()
+
+        path := filepath.Join(dest, f.Name)
+
+        // Check for ZipSlip (Directory traversal)
+        if !strings.HasPrefix(path, filepath.Clean(dest) + string(os.PathSeparator)) {
+            return fmt.Errorf("illegal file path: %s", path)
+        }
+
+        if f.FileInfo().IsDir() {
+            os.MkdirAll(path, f.Mode())
+        } else {
+            os.MkdirAll(filepath.Dir(path), f.Mode())
+            f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+            if err != nil {
+                return err
+            }
+            defer func() {
+                if err := f.Close(); err != nil {
+                    panic(err)
+                }
+            }()
+
+            _, err = io.Copy(f, rc)
+            if err != nil {
+                return err
+            }
+        }
+        return nil
+    }
+
+    for _, f := range r.File {
+        err := extractAndWriteFile(f)
+        if err != nil {
+            return err
+        }
+    }
+
+    return nil
 }
 
 func main() {
-	git.Clone(URL, ".disploy", &git.CloneOptions{})
 
-	files, err := ioutil.ReadDir(".disploy/assets")
+	err := downloadFile(".disploy.zip", URL)
 
 	if err != nil {
-		println(err)
+		fmt.Println(err)
+	}
+
+	err = unzip(".disploy.zip", ".disploy")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	files, err := ioutil.ReadDir(".disploy/create-disploy-app-main/assets")
+
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	columns := []table.Column{
@@ -99,6 +209,6 @@ func main() {
 
 	m := model{t}
 	if _, err := tea.NewProgram(m).Run(); err != nil {
-		println("Error running program:", err)
+		fmt.Println("Error running program:", err)
 	}
 }
