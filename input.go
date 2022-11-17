@@ -1,8 +1,5 @@
 package main
 
-// A simple program demonstrating the text input component from the Bubbles
-// component library.
-
 import (
 	"fmt"
 	"log"
@@ -58,7 +55,6 @@ func (m InputStruct) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
-	// We handle errors just like any other message
 	case errMsg:
 		m.err = msg
 		return m, nil

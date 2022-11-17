@@ -8,7 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-
 var Choices = []string{}
 
 type OptionStruct struct {
@@ -28,7 +27,6 @@ func (m OptionStruct) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "enter":
-			// Send the choice on the channel and exit.
 			m.choice = Choices[m.cursor]
 			return m, tea.Quit
 
