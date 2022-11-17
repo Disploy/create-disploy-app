@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -21,7 +22,7 @@ func WriteToJson(file string, property string, value string, subproperty ...stri
 	}
 
 	bb, err := ioutil.ReadAll(f)
-	
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -51,11 +52,36 @@ func WriteToJson(file string, property string, value string, subproperty ...stri
 	}
 }
 
+func PkgInstallCommand(manager string) string {
+	if manager != "yarn" {
+		return "install"
+	} else {
+		return "add"
+	}
+}
+
 func Copy(dir, project string) {
 	os.Rename(".disploy/create-disploy-app-main/assets/"+dir, project)
 
-	WriteToJson(project + "/package.json", "name", project)
-	WriteToJson(project + "/disploy.json", "name", project)
+	WriteToJson(project+"/package.json", "name", project)
+	WriteToJson(project+"/disploy.json", "name", project)
+
+	m, ok := PackageManagerChoiceModel().(PackageManagerOptionStruct)
+
+	if !ok {
+		fmt.Println("Error: PackageManagerChoiceModel() is not PackageManagerOptionStruct")
+		os.Exit(1)
+	}
+
+	cmd := exec.Command(m.choice, PkgInstallCommand(m.choice), "disploy@dev")
+	cmd.Dir = project
+
+	err := cmd.Run()
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	os.RemoveAll(".disploy")
 	os.Remove(".disploy.zip")
