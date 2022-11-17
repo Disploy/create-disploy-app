@@ -11,7 +11,7 @@ builds:
     ldflags:
       - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
     binary: create-disploy-app
-    main: ./main.go
+    main: ./
     env:
       - CGO_ENABLED=0
     goos:
@@ -22,7 +22,7 @@ builds:
     ldflags:
       - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
     binary: create-disploy-app
-    main: ./main.go
+    main: ./
     env:
       - CGO_ENABLED=0
     goos:
@@ -32,7 +32,7 @@ builds:
   - id: create-disploy-app-linux-amd64
     ldflags:
       - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
-    main: ./main.go
+    main: ./
     binary: create-disploy-app
     env:
       - CGO_ENABLED=0
@@ -43,7 +43,7 @@ builds:
   - id: create-disploy-app-windows-amd64
     ldflags:
       - -s -w -X github.com/Disploy/create-disploy-app/pkg/version.Version={{.Version}}
-    main: ./main.go
+    main: ./
     binary: create-disploy-app
     env:
       - CGO_ENABLED=0
