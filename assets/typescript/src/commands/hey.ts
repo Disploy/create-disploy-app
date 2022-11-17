@@ -1,20 +1,18 @@
-import { Command, type ChatInputInteraction } from "disploy";
+import type { Command } from "disploy";
 
-export default class HeyCommand extends Command {
-  public constructor() {
-    super({
-      name: "hey",
-      description: "hey!",
-    });
-  }
+const HeyCommand: Command = {
+  name: "hey",
+  description: "heyy!",
 
-  override async slashRun(interaction: ChatInputInteraction) {
+  async run(interaction) {
     interaction.deferReply();
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     return void interaction.editReply({
-      content: `Just wanted to say hey!`,
+      content: `Hello! (with artificial delay)`,
     });
-  }
-}
+  },
+};
+
+export default HeyCommand;
