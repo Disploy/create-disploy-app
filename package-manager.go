@@ -53,7 +53,7 @@ func (m PackageManagerOptionStruct) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m PackageManagerOptionStruct) View() string {
 	s := strings.Builder{}
-	s.WriteString("Which package manager you would like to use (esc to quit)\n\n")
+	s.WriteString("Which package manager would you like to use (esc to quit)\n\n")
 
 	for i := 0; i < len(PackageManagers); i++ {
 		if m.cursor == i {
