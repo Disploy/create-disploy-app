@@ -11,7 +11,35 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"golang.org/x/net/html"
 )
+
+func GetFirstHeading(markdown string) string {
+	head := strings.Split(markdown, "<div align=\"center\">")[1]
+	head = strings.Split(head, "</div>")[0]
+
+	r := strings.NewReader(head)
+	z := html.NewTokenizer(r)
+
+	for {
+		tt := z.Next()
+
+		switch {
+		case tt == html.ErrorToken:
+			// End of the document, we're done
+			return ""
+		case tt == html.StartTagToken:
+			t := z.Token()
+
+			if t.Data == "h3" {
+				z.Next()
+				return strings.TrimSpace(z.Token().Data)
+			}
+		}
+	}
+
+}
 
 func WriteToJson(file string, property string, value string, subproperty ...string) {
 	f, err := os.Open(file)

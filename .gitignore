@@ -3,3 +3,5 @@
 node_modules/
 dist/
 create-disploy-app.js
+.disploy/
+.disploy.zip

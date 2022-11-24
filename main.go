@@ -41,7 +41,18 @@ func main() {
 	}
 
 	for _, f := range files {
-		Choices = append(Choices, f.Name())
+		// read the readme.md file and get the first heading
+
+		readme, err := ioutil.ReadFile(".disploy/create-disploy-app-main/assets/" + f.Name() + "/README.md")
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		heading := GetFirstHeading(string(readme))
+
+		Choices = append(Choices, heading)
 	}
 
 	choiceModel := ChoiceModel()

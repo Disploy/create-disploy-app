@@ -7,7 +7,7 @@
 		<a href="https://vercel.com/?utm_source=disploy&utm_campaign=oss"><img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Vercel" /></a>
 	</p>
     <h3>
-        TypeScript Example App
+        Disploy CLI Framework (TypeScript)
     </h3>
 	<br />
 	<p>
