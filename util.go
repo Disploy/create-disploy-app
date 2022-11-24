@@ -91,24 +91,26 @@ func PkgInstallCommand(manager string) string {
 func Copy(dir, project string) {
 	os.Rename(".disploy/create-disploy-app-main/assets/"+dir, project)
 
-	WriteToJson(project+"/package.json", "name", project)
-	WriteToJson(project+"/disploy.json", "name", project)
+	if !strings.Contains(project, "deno") {
+		WriteToJson(project+"/package.json", "name", project)
+		WriteToJson(project+"/disploy.json", "name", project)
 
-	m, ok := PackageManagerChoiceModel().(PackageManagerOptionStruct)
+		m, ok := PackageManagerChoiceModel().(PackageManagerOptionStruct)
 
-	if !ok {
-		fmt.Println("Error: PackageManagerChoiceModel() is not PackageManagerOptionStruct")
-		os.Exit(1)
-	}
+		if !ok {
+			fmt.Println("Error: PackageManagerChoiceModel() is not PackageManagerOptionStruct")
+			os.Exit(1)
+		}
 
-	cmd := exec.Command(m.choice, PkgInstallCommand(m.choice), "disploy@dev")
-	cmd.Dir = project
+		cmd := exec.Command(m.choice, PkgInstallCommand(m.choice), "disploy@dev")
+		cmd.Dir = project
 
-	err := cmd.Run()
+		err := cmd.Run()
 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	}
 
 	os.RemoveAll(".disploy")
