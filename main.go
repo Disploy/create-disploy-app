@@ -52,12 +52,16 @@ func main() {
 
 		heading := GetFirstHeading(string(readme))
 
-		Choices = append(Choices, heading)
+		Choices = append(Choices, Template{
+			Name: heading,
+			Path: f.Name(),
+		})
+
 	}
 
 	choiceModel := ChoiceModel()
 
-	if m, ok := choiceModel.(OptionStruct); ok && m.choice != "" {
-		Copy(m.choice, project)
+	if m, ok := choiceModel.(OptionStruct); ok && m.choice.Path != "" {
+		Copy(m.choice.Path, project)
 	}
 }

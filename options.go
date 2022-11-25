@@ -8,11 +8,16 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-var Choices = []string{}
+type Template struct {
+	Name string
+	Path string
+}
+
+var Choices = []Template{}
 
 type OptionStruct struct {
 	cursor int
-	choice string
+	choice Template
 }
 
 func (m OptionStruct) Init() tea.Cmd {
@@ -57,7 +62,7 @@ func (m OptionStruct) View() string {
 		} else {
 			s.WriteString("[ ] ")
 		}
-		s.WriteString(Choices[i])
+		s.WriteString(Choices[i].Name)
 		s.WriteString("\n")
 	}
 

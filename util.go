@@ -91,9 +91,12 @@ func PkgInstallCommand(manager string) string {
 func Copy(dir, project string) {
 	os.Rename(".disploy/create-disploy-app-main/assets/"+dir, project)
 
+	if strings.Contains(project, "framework") {
+		WriteToJson(project+"/disploy.json", "name", project)
+	}
+
 	if !strings.Contains(project, "deno") {
 		WriteToJson(project+"/package.json", "name", project)
-		WriteToJson(project+"/disploy.json", "name", project)
 
 		m, ok := PackageManagerChoiceModel().(PackageManagerOptionStruct)
 
