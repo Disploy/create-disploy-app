@@ -16,6 +16,7 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
+    "axios": "^1.1.3",
     "daisyui": "^2.42.0",
     "discord-api-types": "^0.37.19",
     "eslint": "8.28.0",
